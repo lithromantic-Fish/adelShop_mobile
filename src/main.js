@@ -49,7 +49,7 @@ axios.interceptors.request.use(function(config) {
 
     return config;
 }, function(error) {
-    console.log('requesterror', error);
+    console.log('请求接口错误', error);
 
     // 对请求错误做些什么
     return Promise.reject(error);
@@ -60,13 +60,13 @@ axios.interceptors.response.use((response) => {
     tryHideFullScreenLoading()
     console.log('response', response);
 
-    if (response.status == 504) {
-        console.log('网络请求错误');
-        endLoading()
-    }
+
     return response
 }, (error) => {
-    console.log('responseerror', error);
+    if (error) {
+        console.log('响应接口错误', error);
+        endLoading()
+    }
 
     return Promise.reject(error)
 })

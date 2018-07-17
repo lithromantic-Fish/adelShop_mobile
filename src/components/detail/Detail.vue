@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<div class="page" v-show="!isRush">
+		<div class="page">
 			<headersec tabname="商品详情" ref="noback"></headersec>
 			<transition :name="slidename">
 				<div class="container" v-show="mainarea">
 					<!-- <div v-show="!havePage">
-											<nopage></nopage>
-										</div> -->
+																	<nopage></nopage>
+																</div> -->
 					<detailTitle :urlRouter="$route.path"></detailTitle>
 					<!-- 轮播图 -->
 					<div class="swiper-container" v-show="havePic">
@@ -20,7 +20,7 @@
 					<div v-show="!havePic" style="    margin-top: .8rem;">
 						<!-- <img src="../../../static/github.png" alt=""/> -->
 						<img style="    width: 100%;
-			   					 height: 3rem;" src="../../../static/img/noPic.png" />
+									   					 height: 3rem;" src="../../../static/img/noPic.png" />
 					</div>
 					<div>
 						<div class="detail-content">
@@ -58,8 +58,8 @@
 					<img src="../../../static/img/icon/cart_white.png" @click="toCart" />
 					<!-- 2222 -->
 					<!-- <transition name="bullet">
-											<p v-show="goodsNum">{{goodsNum}}</p>
-										</transition> -->
+																	<p v-show="goodsNum">{{goodsNum}}</p>
+																</transition> -->
 				</div>
 				<div class="addCart" @click="onCartModel()">
 					<span class="tabbar-label">加入购物车</span>
@@ -85,22 +85,20 @@
 							<div v-for="(item,Oidx) in spec" v-show="haveSpecs">
 								<p class="out_class">{{item.spec_name}}</p>
 								<div class="spces_class">
-									<div v-for="(inItem,Iidx) in item.pros">
-										<p class="pro_class" :class="inItem.active?'isSelect':''" @click.on="proItem(inItem,Oidx,Iidx)">{{inItem.pro_value}}</p>
-									</div>
+									<p v-for="(inItem,Iidx) in item.pros" class="pro_class" :class="inItem.active?'isSelect':''" @click.on="proItem(inItem,Oidx,Iidx)">{{inItem.pro_value}}</p>
 								</div>
 							</div>
 						</div>
 						<div class="cartModel-bottom flex-between">
 							<p>购买数量</p>
 							<div class="goodsOp flex">
-								<img src="../../../static/img/icon/shop_cut.png" @click.stop="onCutCart()" />
+								<img src="../../../static/img/icon/shop_cut.png" @click="onCutCart()" />
 								<input type="text" :value="goodsNum" readonly="" />
-								<img src="../../../static/img/icon/shop_add.png" @click.stop="onAddCart()" />
+								<img src="../../../static/img/icon/shop_add.png" @click="onAddCart()" />
 							</div>
 						</div>
 						<div>
-							<p class="cartModel-addCart" v-show="!isBuy" @clic="addCar(goodsDetail,goodsOut)">
+							<p class="cartModel-addCart" v-show="!isBuy" @click="addCarNow(goodsDetail,goodsOut)" @click.stop="addCartModel=false">
 								加入购物车
 							</p>
 							<p class="cartModel-addCart" v-show="isBuy" @click="buyNow(goodsDetail,goodsOut)">
@@ -132,24 +130,18 @@
 				addCartModel: false,
 				isBuy: true, //是否添加购物车
 				havePage: false, //是否有数据
-				cartLength: '',
-				cartNum: false,
+				cartLength: '', //购物车长度
 				mainarea: false,
-				slidename: 'slide-go',
+				slidename: 'slide-go', //滑动动画参数
 				goodsOut: {}, //商品详情外部对象
 				goodsDetail: {}, //商品详情内部对象
-				isRush: false,
-				goodMs: {},
-				// goodMsOut: {},
 				isLike: false, //是否点赞
 				haveSpecs: false, //是否有规格
-				HOUR_TIME: null,
-				MINUTER_TIME: null,
-				SECONDER_TIME: null,
-				yesNone: true,
-				havePic: false,
-				spec: [],
-				Iitem:[]
+				yesNone: true, //是否点赞过
+				havePic: false, //是否有图片
+				spec: [], //商品的规格
+				specsArr: [], //商品规格（用于判断用户是否选择了规格）,
+				specsId: []
 			}
 		},
 		computed: {
@@ -160,6 +152,8 @@
 			])
 		},
 		mounted() {
+			var spces_class = document.getElementsByClassName('spces_class')
+			console.log('spces_class', spces_class);
 			this.$refs.noback.isBack_detail = false;
 			this.getGoodsDetail();
 			// console.log('log', this.goodMsOut);
@@ -170,8 +164,6 @@
 			}
 			/*拿到路由跳转的id*/
 			const id = this.$route.query.id;
-			// this.isRush = this.$route.query.item.isRushbuy
-			console.log('this.isRush', this.isRush);
 			/*判断动画是进还是出*/
 			if (this.$store.state.comname === 'orderwait' || this.$store.state.comname === 'cart') {
 				this.slidename = 'slide-back';
@@ -187,10 +179,10 @@
 			DetailTitle
 		},
 		methods: {
-						// 选择规格	
+			// 选择规格	
 			proItem(item, Oidx, Iidx) {
 				const that = this
-				var Iitem = that.goodsOut.specs[Oidx].pros//内循环的数组
+				var Iitem = that.goodsOut.specs[Oidx].pros //内循环的数组
 				// item.active = true
 				// console.log('item',item);
 				//每次点击所有的按钮初始化
@@ -199,11 +191,24 @@
 				}
 				//设置当前的选中状态
 				Iitem[Iidx].active = true
-				this.goodsNum ++;
-				this.goodsNum --;
-				console.log('Oidx', Oidx);//外循环的id
-				console.log('Iidx', Iidx);//内循环的id
-				console.log('goodsOut', that.goodsOut.specs[Oidx].pros);
+				this.goodsNum++;
+				this.goodsNum--;
+				console.log('Oidx', Oidx); //外循环的id
+				console.log('Iidx', Iidx); //内循环的id
+				console.log('goodsOut', that.goodsOut.specs[Oidx]);
+				console.log('goodsOut', that.goodsOut.specs[Oidx].pros[Iidx].pro_id);
+				that.specsArr.push(that.goodsOut.specs[Oidx].pros[Iidx])
+				that.specsId = []
+				that.specsArr.forEach((ele, idx) => {
+					if (ele.active) {
+						that.specsId.push(ele.pro_id)
+					} else return
+					console.log('that.specsId.length', that.specsId.length, that.goodsOut.specs.length);
+				})
+				console.log('that.specsArr', that.specsArr);
+			},
+			theFirst() {
+				console.log('the first class');
 			},
 			getGoodsDetail() {
 				const that = this
@@ -275,7 +280,6 @@
 			},
 			buyNow(goodsDetail, goodsOut) {
 				// 请求立即购买支付接口
-				
 				console.log('goodsDetail', goodsDetail);
 				console.log('goodsOut', goodsOut);
 			},
@@ -283,6 +287,7 @@
 				this.$router.push('./cart');
 			},
 			onCartModel() {
+				console.log('点击加入购物车');
 				this.addCartModel = true;
 				this.isBuy = false;
 			},
@@ -315,7 +320,6 @@
 			// },
 			onBuyModel() {
 				console.log('立即购买');
-				
 				this.addCartModel = true;
 				this.isBuy = true;
 			},
@@ -344,9 +348,11 @@
 				}
 			},
 			//添加到购物车
-			addCar(item, goodsOut) {
-				console.log('加入购物车');
+			addCarNow(item, goodsOut) {
+				console.log('最后要加入购物车');
 				const that = this;
+				console.log('goodsOut', goodsOut);
+				console.log('goodsOut.specs', goodsOut.specs.length);
 				if (goodsOut.specs[0]) {
 					// 有规格的商品添加到购物车
 					that.haveSpceToCar(item, goodsOut);
@@ -354,31 +360,37 @@
 					// 无规格的商品添加到购物车
 					that.noHaveSpceToCar(item)
 				}
-				if (this.isBuy) {
-					let orderArr = [];
-					orderArr.push(this.$store.state.goods)
-					this.setOrders(orderArr);
-					this.$router.push('./orderwait')
-				} else {
-					if (!this.cartNum) {
-						this.goodsNum = 0
-						this.setCarts(this.$store.state.goods);
-						this.addCartModel = false;
-						this.cartNum = true;
-						this.cartLength = this.goodsNum;
-						setTimeout(() => {
-							this.cartNum = false;
-						}, 2000)
-					}
-				}
+				// if (this.isBuy) {
+				// 	let orderArr = [];
+				// 	orderArr.push(this.$store.state.goods)
+				// 	this.setOrders(orderArr);
+				// 	this.$router.push('./orderwait')
+				// } else {
+				// 	if (!this.cartNum) {
+				// 		this.goodsNum = 0
+				// 		this.setCarts(this.$store.state.goods);
+				// 		this.addCartModel = false;
+				// 		this.cartNum = true;
+				// 		this.cartLength = this.goodsNum;
+				// 		setTimeout(() => {
+				// 			this.cartNum = false;
+				// 		}, 2000)
+				// 	}
+				// }
 			},
-
 			//添加有规格的商品到购物车
 			haveSpceToCar(item, goodsOut) {
-				console.log('有规格的商品');
 				const that = this
+				if (that.specsId.length == that.goodsOut.specs.length) {
+					console.log('that.specsId', that.specsId);
+					that.specsId = that.specsId.join()
+				} else if (that.specsId.length < that.goodsOut.specs.length) {
+					alert('请选择商品规格')
+					return
+				}
+				console.log('有规格的商品');
 				this.$http
-					.get("/myapi/adel-shop/app/auth/addCart.htm?goodsId=" + item.id + '&count=' + that.goodsNum + '&proIds=' + goodsOut.specs[0].spec_id)
+					.get("/myapi/adel-shop/app/auth/addCart.htm?goodsId=" + item.id + '&count=' + that.goodsNum + '&proIds=' + that.specsId)
 					.then(function(res) {})
 					.catch(function(error) {});
 			},
@@ -417,7 +429,7 @@
 
 <style lang="less" scoped>
 	@import '../../../static/less/variable.less';
-	.spces_class{
+	.spces_class {
 		display: flex;
 		flex-wrap: wrap;
 	}
@@ -472,7 +484,7 @@
 	}
 	.isSelect {
 		background-color: #E43448;
-		color:white
+		color: white
 	}
 	.toCart {
 		position: relative;
@@ -489,7 +501,7 @@
 			border-radius: .8rem;
 		}
 	}
-	.noSelect{
+	.noSelect {
 		background-color: black;
 		color: white
 	}
