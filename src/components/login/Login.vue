@@ -1,7 +1,7 @@
 <template>
     <div class="container_wrap">
         <div class="input_up1">
-            <input type="text" class="base_input3" placeholder="请输入用户名" id="userName" value="test" />
+            <input type="text" class="base_input3" placeholder="请输入用户名" id="userName" value="myshop" />
             <input type="text" class="base_input4" placeholder="请输入密码" id="passWord"  value="123456"/>
         </div>
         <button class="btn_login" @click="getInfomation()" >登录</button>
