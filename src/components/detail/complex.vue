@@ -5,7 +5,7 @@
         <detailTitle></detailTitle>
         <DetailTab style="margin-top: .65rem;" :urlRouter2="$route.path"></DetailTab>
         <div style="height:.6rem"></div>
-        <div v-for="evaluateItem in productList">
+        <div v-for="evaluateItem in productList" @click="todetail(evaluateItem)">
             <div class="a">
                 <div class="img_left">
                     <img class="img_goods" :src="evaluateItem.goods_image_path">
@@ -34,35 +34,45 @@
             DetailTitle,
             DetailTab
         },
-        data(){
-            return{
+        data() {
+            return {
                 productList: [],
                 myconfig: {},
                 totalList: [],
                 pageNum: 1,
-                gc_id:null
+                gc_id: null
             }
         },
-           
         mounted() {
             this.$refs.noback.isBack_detail = false;
             var mitem = JSON.parse(localStorage.getItem("goodItem"));
-                this.gc_id = mitem.goods.gc_id
-                console.log('this.gc_id',this.gc_id);
-                this.getComplex();
-                
+            this.gc_id = mitem.goods.gc_id
+            console.log('this.gc_id', this.gc_id);
+            this.getComplex();
         },
         methods: {
             getComplex() {
                 const that = this
                 this.$http
-                    .get("/myapi/adel-shop/app/search.htm?gc_id="+that.gc_id)
+                    .get("/myapi/adel-shop/app/search.htm?gc_id=" + that.gc_id)
                     .then(function(res) {
                         that.productList = res.data.data.goodsList
                         console.log('that.evaluteList', that.productList);
                     })
                     .catch(function(error) {});
             },
+            todetail(item) {
+                this.$router.push({
+                    path: "/detail",
+                    query: {
+                        id: item.id,
+                        item: item
+                    }
+                });
+                this.setGoods(item);
+                console.log('item',item);
+                
+            }
         }
     }
 </script>

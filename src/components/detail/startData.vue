@@ -341,6 +341,15 @@
             heiheihei(parm){
                 console.log("parm",parm);
             },
+                   toDatail(item) {
+                this.$router.push({
+                    path: "/detail",
+                    query: {
+                        id: item.id,
+                        item: item
+                    }
+                });
+        },
             //上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
             upCallback: function(page) {
                 //联网加载数据

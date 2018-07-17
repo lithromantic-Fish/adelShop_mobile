@@ -338,6 +338,15 @@
             });
         },
         methods: {
+                   toDatail(item) {
+                this.$router.push({
+                    path: "/detail",
+                    query: {
+                        id: item.id,
+                        item: item
+                    }
+                });
+        },
             heiheihei(parm){
                 console.log("parm",parm);
             },

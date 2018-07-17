@@ -42,7 +42,7 @@
     }
     /*mescroll滚动的区域*/
     .mescroll {
-      position: fixed;
+        position: fixed;
         top: 1rem;
         bottom: 0;
         height: auto;
@@ -109,7 +109,7 @@
         box-sizing: border-box;
     }
     .tite_intpx_evalute {
-         color: red;
+        color: red;
         padding-bottom: .1rem;
         box-sizing: border-box;
         border-bottom: .01rem solid red!important
@@ -228,25 +228,23 @@
 
 <template>
     <div>
-         <headersec tabname="智能硬件" ref="noback" @nodeEvent="heiheihei"></headersec>
-        
-          <div id="mescroll" class="mescroll">
-        <!--滑动区域-->
-        <div class="flex-between flex-align-center">
-            <div class="wapr">
-              
-                <div class="my_wrap">
-                    <div class="tab-item">
-                                   <router-link to='./intellData'>
-                            <p class="tab-tite_intpx_pirce ">价格</p>
-                        </router-link>
+        <headersec tabname="智能硬件" ref="noback" @nodeEvent="heiheihei"></headersec>
+        <div id="mescroll" class="mescroll">
+            <!--滑动区域-->
+            <div class="flex-between flex-align-center">
+                <div class="wapr">
+                    <div class="my_wrap">
+                        <div class="tab-item">
+                            <router-link to='./intellData'>
+                                <p class="tab-tite_intpx_pirce ">价格</p>
+                            </router-link>
+                        </div>
+                        <div class="tab-item">
+                            <router-link to='./intellpx'>
+                                <p class="tite_intpx_evalute">评论最多</p>
+                            </router-link>
+                        </div>
                     </div>
-                    <div class="tab-item">
-                        <router-link to='./intellpx'>
-                            <p class="tite_intpx_evalute">评论最多</p>
-                        </router-link>
-                    </div>
-                </div>
                     <!--展示上拉加载的数据列表-->
                     <div class="wrap_goods" v-for="item in  ListData" @click="toDatail(item)">
                         <div class="items">
@@ -303,12 +301,12 @@
             DetailTab
         },
         mounted() {
-            console.log('this.$res',this.$refs);
+            console.log('this.$res', this.$refs);
             this.$refs.noback.isBack_detail = false;
             //创建MeScroll对象,down可以不用配置,因为内部已默认开启下拉刷新,重置列表数据为第一页
             //解析: 下拉回调默认调用mescroll.resetUpScroll(); 而resetUpScroll会将page.num=1,再执行up.callback,从而实现刷新列表数据为第一页;
             var self = this;
-                self.mescroll = new MeScroll("mescroll", { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+            self.mescroll = new MeScroll("mescroll", { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
                 up: {
                     callback: self.upCallback, //上拉回调
                     //以下参数可删除,不配置
@@ -338,8 +336,17 @@
             });
         },
         methods: {
-            heiheihei(parm){
-                console.log("parm",parm);
+            toDatail(item) {
+                this.$router.push({
+                    path: "/detail",
+                    query: {
+                        id: item.id,
+                        item: item
+                    }
+                });
+            },
+            heiheihei(parm) {
+                console.log("parm", parm);
             },
             //上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
             upCallback: function(page) {
@@ -351,8 +358,7 @@
                     if (page.num == 1) {
                         self.ListData = [];
                     }
-                    console.log('curPageData',curPageData);
-                    
+                    console.log('curPageData', curPageData);
                     //更新列表数据
                     self.ListData = self.ListData.concat(curPageData)
                     console.log('self,productList', self.ListData);
@@ -363,7 +369,7 @@
                         self.pdlist.length);
                     console.log('self.totalPage', self.totalPage);
                     //方法一(推荐): 后台接口有返回列表的总页数 totalPage
-                    self.mescroll.endByPage( self.ListData.length, self.totalPage); //必传参数(当前页的数据个数, 总页数)
+                    self.mescroll.endByPage(self.ListData.length, self.totalPage); //必传参数(当前页的数据个数, 总页数)
                     //方法二(推荐): 后台接口有返回列表的总数据量 totalSize
                     //self.mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
                     //方法三(推荐): 您有其他方式知道是否有下一页 hasNext
@@ -382,8 +388,7 @@
                             // self.productList = res.data.data.goodsList
                             self.curPageData = res.data.data.goodsList.resultList //当前页的数据
                             self.totalPage = res.data.data.goodsList.totalPages //总页的页数
-                            console.log('res.data.data.totalPage11111111111111111111',res.data.data.goodsList.totalPages);
-                            
+                            console.log('res.data.data.totalPage11111111111111111111', res.data.data.goodsList.totalPages);
                             // page.size = res.data.data.pageSize //当前页的数据个数
                             // self.ListData = self.ListData.concat(self.productList)
                             // console.log('ListData',ListData);
