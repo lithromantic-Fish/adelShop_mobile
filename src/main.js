@@ -49,7 +49,7 @@ axios.interceptors.request.use(function(config) {
 
     return config;
 }, function(error) {
-    console.log('requesterror', error);
+    console.log('请求接口错误', error);
 
     // 对请求错误做些什么
     return Promise.reject(error);
@@ -66,7 +66,7 @@ axios.interceptors.response.use((response) => {
     }
     return response
 }, (error) => {
-    console.log('responseerror', error);
+    console.log('响应接口错误', error);
 
     return Promise.reject(error)
 })

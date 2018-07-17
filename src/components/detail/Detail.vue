@@ -283,6 +283,8 @@
 				this.$router.push('./cart');
 			},
 			onCartModel() {
+				console.log('点击加入购物车');
+				
 				this.addCartModel = true;
 				this.isBuy = false;
 			},
