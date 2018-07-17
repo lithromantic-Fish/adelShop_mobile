@@ -275,6 +275,7 @@
 			},
 			buyNow(goodsDetail, goodsOut) {
 				// 请求立即购买支付接口
+				
 				console.log('goodsDetail', goodsDetail);
 				console.log('goodsOut', goodsOut);
 			},
