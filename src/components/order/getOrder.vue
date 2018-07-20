@@ -34,13 +34,12 @@
             </div>
         </div>
         <div class="togetpay" @click="tozfbPay">
-                <!-- <a style="color:black" :href="pay_get">去支付</a> -->
-                <p style="color:white" >去支付</p>
-               
+            <!-- <a style="color:black" :href="pay_get">去支付</a> -->
+            <p style="color:white">去支付</p>
         </div>
         <!-- <div class="togetpay" @click="towxPay">
-                    <a :href="pay_get">去支付</a>
-                </div> -->
+                                        <a :href="pay_get">去支付</a>
+                                    </div> -->
     </div>
 </template>
 <script>
@@ -52,63 +51,58 @@
                 pice: null,
                 orderIdL: null,
                 pay_get: "",
-                wxPay:false,
-                zfbPay:false
+                wxPay: false,
+                zfbPay: false
             }
         },
         components: {
             Headersec,
         },
         mounted() {
-            this.getAddressList();
             this.orderIdL = this.$route.query.orderIdL
             var cat = JSON.parse(localStorage.getItem("obj"));
-            // var default_address = JSON.parse(localStorage.getItem("default_address"));
             var pice = localStorage.getItem('pice');
             console.log('pice', pice);
             this.pice = pice
-            // this.default_address = default_address
-            // console.log('this.default_address ', this.default_address);
-            // this.toPay();
-            
+            var default_address = JSON.parse(localStorage.getItem("default_address11111"));
+			this.default_address = default_address
+			console.log('this.default_address',this.default_address);
         },
         methods: {
-            		getAddressList() {
-				const that = this
-				this.$http
-					.get("/myapi/adel-shop/app/auth/getAddress.htm")
-					.then(function(res) {
-						that.havePage = false
-						that.addressList = res.data.data
-						that.addressList.addressList.forEach(ele => {
-							if (ele.is_default == 1) {
-								that.default_address = ele
-							}
-						})
-					})
-					.catch(function(error) {});
-			},
+            getAddressList() {
+                const that = this
+                this.$http
+                    .get("/myapi/adel-shop/app/auth/getAddress.htm")
+                    .then(function(res) {
+                        that.havePage = false
+                        that.addressList = res.data.data
+                        that.addressList.addressList.forEach(ele => {
+                            if (ele.is_default == 1) {
+                                that.default_address = ele
+                            }
+                        })
+                    })
+                    .catch(function(error) {});
+            },
             // 支付宝支付
             tozfbPay() {
-             var wxpz = document.getElementById('wxPay').checked         
-               console.log('wx',wxpz);
-               var zfbC = document.getElementById('zfbPay').checked 
-               console.log('zfvc',zfbC);
-                if(wxpz){
+                var wxpz = document.getElementById('wxPay').checked
+                console.log('wx', wxpz);
+                var zfbC = document.getElementById('zfbPay').checked
+                console.log('zfvc', zfbC);
+                if (wxpz) {
                     console.log('微信支付');
                     const that = this
                     this.$http
                         .get("/myapi/adel-shop/app/auth/paymentForWap.htm?payTradeNo=" + that.orderIdL + "&paymentId=" + '13')
                         .then(function(res) {
                             console.log('res', res.data.data);
-                            
                             that.pay_get = res.data.data
                             //  window.location.href(that.pay_get)
-                             window.location.href=that.pay_get;  
+                            window.location.href = that.pay_get;
                         })
                         .catch(function(error) {});
-                    }
-                else if(zfbC){
+                } else if (zfbC) {
                     console.log('支付宝支付');
                     this.zfbPay = true
                     const that = this
@@ -116,7 +110,7 @@
                         .get("/myapi/adel-shop/app/auth/paymentForWap.htm?payTradeNo=" + that.orderIdL + "&paymentId=" + '11')
                         .then(function(res) {
                             console.log('res', res.data);
-                                  that.$router.push({
+                            that.$router.push({
                                 path: './topay',
                                 query: {
                                     payHtml: res.data
@@ -125,9 +119,8 @@
                             // that.pay_get = res.data
                         })
                         .catch(function(error) {});
-                    }
+                }
             },
-      
         }
     }
 </script>

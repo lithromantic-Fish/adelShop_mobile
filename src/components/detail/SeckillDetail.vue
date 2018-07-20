@@ -201,17 +201,17 @@
 </template>
 
 <script>
-	import Headersec from '../base/HeaderSec.vue';
-	import Nopage from '../base/NoPage.vue';
-	import DetailTab from '../base/DetailTab.vue'
-	import DetailTitle from '../base/DetailTitle.vue'
+	import Headersec from "../base/HeaderSec.vue";
+	import Nopage from "../base/NoPage.vue";
+	import DetailTab from "../base/DetailTab.vue";
+	import DetailTitle from "../base/DetailTitle.vue";
 	import "../../../static/css/swiper.min.css";
-	import MeScroll from '../../../static/js/mescroll.m.js';
+	import MeScroll from "../../../static/js/mescroll.m.js";
 	import Swiper from "../../../static/js/swiper.min.js";
 	import {
 		mapGetters,
 		mapMutations
-	} from 'vuex';
+	} from "vuex";
 	export default {
 		data() {
 			return {
@@ -222,9 +222,9 @@
 				addCartModel: false,
 				isBuy: true, //是加入购物车还是立即购买
 				havePage: false, //是否有数据
-				cartLength: '',
+				cartLength: "",
 				cartNum: false,
-				slidename: 'slide-go', //滑动属性
+				slidename: "slide-go", //滑动属性
 				// goodsOut: {},//
 				goodsDetail: {},
 				goodMs: {},
@@ -246,13 +246,16 @@
 				haveDefault: [], //是否有默认地址（arr）
 				noDefault: false, //是否有默认地址（bloon）
 				haveSelectSpec: [], //选择的规格
-			}
+				spec: [], //商品的规格
+				specsArr: [], //商品规格（用于判断用户是否选择了规格）,
+				specsId: []
+			};
 		},
 		computed: {
 			...mapGetters([
-				'this.$store.state.goods',
-				'this.$store.state.carts',
-				'this.$store.state.comname'
+				"this.$store.state.goods",
+				"this.$store.state.carts",
+				"this.$store.state.comname"
 			])
 		},
 		mounted() {
@@ -261,22 +264,25 @@
 			this.getGoodsDetail();
 			this.getAddressList();
 			this.getComplexDetail();
-			this.GLOBAL.token = this.$route.query.id
+			this.GLOBAL.token = this.$route.query.id;
 			if (this.$store.state.carts != undefined) {
 				this.cartLength = this.$store.state.carts.length;
 			}
 			/*拿到路由跳转的id*/
 			const id = this.$route.query.id;
-			const item = this.$route.query.item
-			const gg_id = this.$route.query.gg_id
-			this.gg_id = gg_id
+			const item = this.$route.query.item;
+			const gg_id = this.$route.query.gg_id;
+			this.gg_id = gg_id;
 			/*判断动画是进还是出*/
-			if (this.$store.state.comname === 'orderwait' || this.$store.state.comname === 'cart') {
-				this.slidename = 'slide-back';
+			if (
+				this.$store.state.comname === "orderwait" ||
+				this.$store.state.comname === "cart"
+			) {
+				this.slidename = "slide-back";
 			} else {
-				this.slidename = 'slide-go'
+				this.slidename = "slide-go";
 			}
-			this.setComname('goodsdetail');
+			this.setComname("goodsdetail");
 		},
 		components: {
 			Headersec,
@@ -286,86 +292,101 @@
 		},
 		methods: {
 			proItem(Oidx, Iidx) {
-				console.log('Oidx', Oidx);
-				console.log('Iidx', Iidx);
-				console.log(' this.goodsDetail.specs', this.goodsDetail.specs);
-				console.log('goodsDetail', this.goodsDetail.specs[Oidx].pros); //当前选择的数组
-				var Iitem = this.goodsDetail.specs[Oidx].pros
-				//每次点击所有的按钮初始化
+				const that = this;
+				console.log("Oidx", Oidx);
+				console.log("Iidx", Iidx);
+				console.log(" this.goodsDetail.specs", this.goodsDetail.specs);
+				console.log("goodsDetail", this.goodsDetail.specs[Oidx].pros); //当前选择的数组
+				var Iitem = this.goodsDetail.specs[Oidx].pros;
+				// //每次点击所有的按钮初始化
 				for (var i = 0; i < Iitem.length; i++) {
-					Iitem[i].active = false
+					Iitem[i].active = false;
 				}
-				//设置当前的选中状态
-				Iitem[Iidx].active = true
-				if (Iitem[Iidx].active) {
-					console.log('pro_id', Iitem[Iidx].pro_id, Iitem[Iidx].pro_value);
-					this.haveSelectSpec.push(Iitem[Iidx].pro_id)
-				}
-					console.log('this.haveSelectSpec', this.haveSelectSpec);
-				
-				console.log('Iitem[Iidx]', Iitem[Iidx]);
+				this.goodsNum++;
+				this.goodsNum--;
+				// //设置当前的选中状态
+				Iitem[Iidx].active = true;
+				// if (Iitem[Iidx].active) {
+				// 	console.log('pro_id', Iitem[Iidx].pro_id, Iitem[Iidx].pro_value);
+				// 	this.haveSelectSpec.push(Iitem[Iidx].pro_id)
+				// }
+				that.specsArr.push(Iitem[Iidx]);
+				that.specsId = [];
+				console.log("	that.specsArr", that.specsArr);
+				that.specsArr.forEach((ele, idx) => {
+					if (ele.active) {
+						that.specsId.push(ele.pro_id);
+					} else return;
+					// console.log('that.specsId.length', that.specsId.length, that.goodsOut.specs.length);
+				});
+				console.log("typeof", typeof that.specsId);
+				// console.log('that.specsId',that.specsId);
+				that.specsId = [...new Set(that.specsId)];
+				console.log("that.specsId", that.specsId);
+				console.log("this.haveSelectSpec", this.haveSelectSpec);
+				console.log("Iitem[Iidx]", Iitem[Iidx]);
 			},
 			// proItem2(item, idx) {
 			// 	this.theNum2 = idx
 			// },
 			/**获取收货地址 */
 			getAddressList() {
-				const that = this
+				const that = this;
 				this.$http
 					.get("/myapi/adel-shop/app/auth/getAddress.htm")
 					.then(function(res) {
-						that.havePage = false
-						that.addressList = res.data.data
+						that.havePage = false;
+						that.addressList = res.data.data;
 						that.addressList.addressList.forEach(ele => {
 							if (ele.is_default == 1) {
-								that.default_address = ele
+								that.default_address = ele;
 							} else {
-								that.haveDefault.push(ele.is_default)
-								if (!that.haveDefault.includes('1')) {
-									console.log('没有默认地址');
-									that.noDefault = true
+								that.haveDefault.push(ele.is_default);
+								if (!that.haveDefault.includes("1")) {
+									console.log("没有默认地址");
+									that.noDefault = true;
 								} else {
-									that.noDefault = false
+									that.noDefault = false;
 								}
 							}
-						})
+						});
 					})
 					.catch(function(error) {});
 			},
 			tomore() {
-				this.haveMore = !this.haveMore
+				this.haveMore = !this.haveMore;
 			},
 			tomore_gg() {
-				this.haveMore_gg = !this.haveMore_gg
+				this.haveMore_gg = !this.haveMore_gg;
 			},
 			tomore_com() {
-				this.haveMore_com = !this.haveMore_com
+				this.haveMore_com = !this.haveMore_com;
 			},
 			// 相关商品列表
 			getComplexDetail() {
-				const gg_id = this.$route.query.gg_id
-				const that = this
+				const gg_id = this.$route.query.gg_id;
+				const that = this;
 				this.$http
 					.get("/myapi/adel-shop/app/search.htm?gc_id=" + gg_id)
 					.then(function(res) {
 						if (res.data.data == null) {
-							that.isNull = true
+							that.isNull = true;
 						} else {
-							that.complexList = res.data.data.goodsList
+							that.complexList = res.data.data.goodsList;
 						}
 					})
 					.catch(function(error) {});
 			},
 			/*进入商品详情*/
 			getGoodsDetail() {
-				const that = this
-				const goods_id = this.$route.query.id
-				const item = this.$route.query.item
+				const that = this;
+				const goods_id = this.$route.query.id;
+				const item = this.$route.query.item;
 				this.$http
 					.get("/myapi/adel-shop/app/flashSaleDetail.htm?id=" + goods_id)
 					.then(function(res) {
-						that.spec = res.data.data.specs
-						that.goodsDetail = res.data.data
+						that.spec = res.data.data.specs;
+						that.goodsDetail = res.data.data;
 						setTimeout(() => {
 							const swiper = new Swiper(".swiper-container", {
 								pagination: ".swiper-pagination",
@@ -375,34 +396,34 @@
 								effect: "fade"
 							});
 						}, 200);
-						console.log('res.data.data.picPaths', res.data.data.picPaths);
+						console.log("res.data.data.picPaths", res.data.data.picPaths);
 						if (res.data.data.picPaths.length != 0) {
-							that.isHavePic = true
-							console.log('有图片');
+							that.isHavePic = true;
+							console.log("有图片");
 						} else {
-							that.isHavePic = false
-							console.log('没有图片');
+							that.isHavePic = false;
+							console.log("没有图片");
 						}
 						if (res.data.data.specs.length == 0) {
-							that.specIsNull = true
+							that.specIsNull = true;
 						} else {
-							that.specIsNull = false
+							that.specIsNull = false;
 						}
 						var clotime = Number(new Date(res.data.data.closeTime)) / 1000;
 						var currentTime = Number(new Date(res.data.data.currentTime)) / 1000;
-						that.needTime = clotime - currentTime
+						that.needTime = clotime - currentTime;
 						that.getMyTime(that.needTime);
 						if (that.goodsDetail.is_collect == 0) {
-							that.yesNone = true
+							that.yesNone = true;
 						} else {
-							that.yesNone = false
+							that.yesNone = false;
 						}
 					})
 					.catch(function(error) {});
 				// }
 			},
 			getMyTime(needTime) {
-				const that = this
+				const that = this;
 				function countDown(times) {
 					var timer = null;
 					timer = setInterval(function() {
@@ -412,14 +433,18 @@
 							second = 0; //时间默认值
 						if (times > 0) {
 							day = Math.floor(times / (60 * 60 * 24));
-							hour = Math.floor(times / (60 * 60)) - (day * 24);
-							minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
-							second = Math.floor(times) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+							hour = Math.floor(times / (60 * 60)) - day * 24;
+							minute = Math.floor(times / 60) - day * 24 * 60 - hour * 60;
+							second =
+								Math.floor(times) -
+								day * 24 * 60 * 60 -
+								hour * 60 * 60 -
+								minute * 60;
 						}
-						if (day <= 9) day = '0' + day;
-						if (hour <= 9) hour = '0' + hour;
-						if (minute <= 9) minute = '0' + minute;
-						if (second <= 9) second = '0' + second;
+						if (day <= 9) day = "0" + day;
+						if (hour <= 9) hour = "0" + hour;
+						if (minute <= 9) minute = "0" + minute;
+						if (second <= 9) second = "0" + second;
 						that.day_time = day;
 						that.hour_time = hour;
 						that.minuter_time = minute;
@@ -430,10 +455,10 @@
 						clearInterval(timer);
 					}
 				}
-				countDown(that.needTime)
+				countDown(that.needTime);
 			},
 			toCart() {
-				this.$router.push('./cart');
+				this.$router.push("./cart");
 			},
 			onCartModel() {
 				this.addCartModel = true;
@@ -479,34 +504,41 @@
 			},
 			onBuy(item) {
 				const that = this;
-				if (item.specs[0]) {
-					// 有规格的商品添加到购物车
-					that.getMoreCar(item);
-				} else {
-					// 无规格的商品添加到购物车
-					that.getGoodsToCar(item)
+				if (that.specsId.length == item.specs.length) {
+					if (item.specs[0]) {
+						// 有规格的商品添加到购物车
+						that.getMoreCar(item);
+					} else {
+						// 无规格的商品添加到购物车
+						that.getGoodsToCar(item);
+					}
+				} else if (that.specsId.length < item.specs.length) {
+					alert("请选择商品规格");
+					return;
 				}
 				if (this.isBuy) {
+					// 立即购买
+					console.log("立即购买11111111111");
 					let orderArr = [];
-					orderArr.push(this.$store.state.goods)
+					orderArr.push(this.$store.state.goods);
 					this.setOrders(orderArr);
 					this.$router.push('./orderwait')
 				} else {
 					if (!this.cartNum) {
-						this.goodsNum = 1
+						this.goodsNum = 1;
 						this.setCarts(this.$store.state.goods);
 						this.addCartModel = false;
 						this.cartNum = true;
 						this.cartLength = this.goodsNum;
 						setTimeout(() => {
 							this.cartNum = false;
-						}, 2000)
+						}, 2000);
 					}
 				}
 			},
 			onChooseAddress(item) {
-				this.default_address = item
-				this.noDefault = false
+				this.default_address = item;
+				this.noDefault = false;
 				// if (this.$store.state.ischoose == 1) {
 				// 	this.setChooseaddress(item);
 				// 	this.setIschoose(2);
@@ -516,18 +548,31 @@
 			},
 			//添加有规格的商品到购物车
 			getMoreCar(item) {
-				const that = this
-				 var specID = this.haveSelectSpec.join()
+				const that = this;
+				console.log("item", item);
+				// var specID = this.haveSelectSpec.join()
 				this.$http
-					.get("/myapi/adel-shop/app/auth/addCart.htm?goodsId=" + item.goods_id + '&count=' + that.goodsNum + '&proIds=' + specID)
+					.get(
+						"/myapi/adel-shop/app/auth/addCart.htm?goodsId=" +
+						item.goods_id +
+						"&count=" +
+						that.goodsNum +
+						"&proIds=" +
+						that.specsId
+					)
 					.then(function(res) {})
 					.catch(function(error) {});
 			},
 			// 添加商品到购物车
 			getGoodsToCar(item) {
-				const that = this
+				const that = this;
 				this.$http
-					.get("/myapi/adel-shop/app/auth/addCart.htm?goodsId=" + item.goods_id + '&count=' + that.goodsNum)
+					.get(
+						"/myapi/adel-shop/app/auth/addCart.htm?goodsId=" +
+						item.goods_id +
+						"&count=" +
+						that.goodsNum
+					)
 					.then(function(res) {})
 					.catch(function(error) {});
 			},
@@ -548,23 +593,23 @@
 			// 		.catch(function(error) {});
 			// },
 			...mapMutations({
-				setOrders: 'SET_ORDERS',
-				setCarts: 'SET_CARTS',
-				setComname: 'SET_COMNAME'
+				setOrders: "SET_ORDERS",
+				setCarts: "SET_CARTS",
+				setComname: "SET_COMNAME"
 			})
 		}
-	}
+	};
 </script>
 
 <style lang="less" scoped>
-	@import '../../../static/less/variable.less';
-	@import '../../../static/css/mescroll.min.css';
+	@import "../../../static/less/variable.less";
+	@import "../../../static/css/mescroll.min.css";
 	.detial {
-		padding-top: .8rem;
-		padding-bottom: .88rem;
+		padding-top: 0.8rem;
+		padding-bottom: 0.88rem;
 	}
 	.active {
-		background-color: red!important
+		background-color: red !important;
 	}
 	.arer_aaa {
 		overflow: hidden;
@@ -574,8 +619,8 @@
 		width: 5.5rem;
 	}
 	.out_class {
-		padding: 0 .2rem;
-		font-size: .24rem;
+		padding: 0 0.2rem;
+		font-size: 0.24rem;
 	}
 	.goodsImg {
 		width: 100%;
@@ -588,8 +633,8 @@
 	}
 	.default_add {
 		color: white;
-		background-color: #CD0000;
-		border-radius: .08rem;
+		background-color: #cd0000;
+		border-radius: 0.08rem;
 		width: 1.2rem;
 		justify-content: center;
 		align-items: center;
@@ -599,16 +644,16 @@
 		flex-direction: column;
 		display: flex;
 		align-items: center;
-		font-size: .26rem;
-		color: #7D7D7D;
-		padding: .2rem;
+		font-size: 0.26rem;
+		color: #7d7d7d;
+		padding: 0.2rem;
 	}
 	.address_wrap1 {
 		display: flex;
 		align-items: center;
-		font-size: .26rem;
-		color: #7D7D7D;
-		padding: .2rem;
+		font-size: 0.26rem;
+		color: #7d7d7d;
+		padding: 0.2rem;
 		justify-content: space-between;
 	}
 	.wrap_hang {
@@ -619,63 +664,63 @@
 		width: 5.5rem;
 	}
 	.img_address {
-		width: .4rem;
-		height: .4rem;
-		padding-right: .2rem;
+		width: 0.4rem;
+		height: 0.4rem;
+		padding-right: 0.2rem;
 	}
 	.item_spec {
-		padding: 0 .4rem;
-		font-size: .24rem;
+		padding: 0 0.4rem;
+		font-size: 0.24rem;
 	}
 	.address_tab {
 		color: white;
-		background-color: #CD661D;
-		border-radius: .08rem;
-		width: .4rem;
+		background-color: #cd661d;
+		border-radius: 0.08rem;
+		width: 0.4rem;
 		justify-content: center;
 		align-items: center;
 		display: flex;
 	}
 	.address_tab1 {
 		color: white;
-		background-color: #CD661D;
-		border-radius: .08rem;
-		width: .8rem;
+		background-color: #cd661d;
+		border-radius: 0.08rem;
+		width: 0.8rem;
 		justify-content: center;
 		align-items: center;
 		display: flex;
 	}
 	.keepshop {
 		font-size: 0.28rem;
-		background-color: #E43448;
+		background-color: #e43448;
 		color: white;
 		width: 3.8rem;
-		height: .45rem;
-		border-radius: .1rem;
+		height: 0.45rem;
+		border-radius: 0.1rem;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin: .2rem 0;
+		margin: 0.2rem 0;
 	}
 	.pro_class {
-		width: .8rem;
-		background-color: #EAEAEA;
-		height: .4rem;
+		width: 0.8rem;
+		background-color: #eaeaea;
+		height: 0.4rem;
 		justify-content: center;
 		align-items: center;
 		display: flex;
 		color: #636363;
-		margin: .2rem;
+		margin: 0.2rem;
 	}
 	.isSelect {
-		background-color: #E43448;
-		color: white
+		background-color: #e43448;
+		color: white;
 	}
 	.noSelect {}
 	.address-item {
 		justify-content: center;
 		display: flex;
-		border-bottom: 1px solid #8B8878;
+		border-bottom: 1px solid #8b8878;
 	}
 	.wrap_aItem {
 		border: 1px solid #515151;
@@ -690,7 +735,7 @@
 	.wrap_pice {
 		display: flex;
 		justify-content: space-between;
-		align-items: center
+		align-items: center;
 	}
 	.addd {
 		display: flex;
@@ -700,31 +745,31 @@
 		width: 5rem;
 	}
 	.roboting {
-		background-color: #E43448;
+		background-color: #e43448;
 		color: white;
 		width: 1rem;
-		height: .4rem;
-		border-radius: .1rem;
+		height: 0.4rem;
+		border-radius: 0.1rem;
 		display: flex;
 		justify-content: center; // align-items: center;
 	}
 	.goods-name {
-		width: 6.2rem
+		width: 6.2rem;
 	}
 	.detail-content {
-		padding: .2rem .3rem 0 .3rem;
+		padding: 0.2rem 0.3rem 0 0.3rem;
 	}
 	.detail-bottom {
 		position: fixed;
 		bottom: 0;
 		width: 100%;
-		height: .8rem;
+		height: 0.8rem;
 		background: @theme_background;
 		color: @base_color;
-		font-size: .28rem;
+		font-size: 0.28rem;
 		img {
-			width: .4rem;
-			height: .4rem;
+			width: 0.4rem;
+			height: 0.4rem;
 		}
 	}
 	.address_child {
@@ -732,29 +777,29 @@
 		justify-content: space-between;
 	}
 	.cartModel-bottom {
-		padding: .2rem;
-		font-size: .24rem;
+		padding: 0.2rem;
+		font-size: 0.24rem;
 		border-top: 1px solid #ccc;
 		text-align: center;
 	}
 	.cartModel-addCart {
 		background: @theme_background;
-		height: .8rem;
+		height: 0.8rem;
 		color: @base_color;
-		line-height: .8rem;
-		font-size: .28rem;
+		line-height: 0.8rem;
+		font-size: 0.28rem;
 		text-align: center;
 	}
 	.goodsOp {
 		input {
-			font-size: .24rem;
+			font-size: 0.24rem;
 			border: none;
-			width: .6rem;
+			width: 0.6rem;
 			text-align: center;
 		}
 		img {
-			width: .32rem;
-			height: .32rem;
+			width: 0.32rem;
+			height: 0.32rem;
 		}
 	}
 	.noData {
@@ -763,41 +808,41 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		font-size: .26rem;
+		font-size: 0.26rem;
 	}
 	.toCart {
 		position: relative;
 		p {
 			position: absolute;
 			text-align: center;
-			top: -.2rem;
-			right: -.2rem;
+			top: -0.2rem;
+			right: -0.2rem;
 			background: @base_color;
 			color: @theme_background;
-			width: .4rem;
-			height: .4rem;
-			line-height: .4rem;
-			border-radius: .8rem;
+			width: 0.4rem;
+			height: 0.4rem;
+			line-height: 0.4rem;
+			border-radius: 0.8rem;
 		}
 	}
 	.video {
-		height: .6rem;
+		height: 0.6rem;
 		display: flex;
 		align-items: center;
-		margin-left: .3rem;
+		margin-left: 0.3rem;
 	}
 	.p_time {
-		height: .35rem;
-		width: .35rem;
+		height: 0.35rem;
+		width: 0.35rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-left: .1rem;
-		margin-right: .1rem;
-		border-radius: .05rem;
+		margin-left: 0.1rem;
+		margin-right: 0.1rem;
+		border-radius: 0.05rem;
 		background-color: #fff;
 		background-color: #eee;
-		padding: .05rem;
+		padding: 0.05rem;
 	}
 	.gets {
 		overflow: hidden;
@@ -808,54 +853,54 @@
 		bottom: 0;
 		width: 100%;
 		box-sizing: border-box;
-		padding-top: .2rem;
+		padding-top: 0.2rem;
 		background: @base_color;
 	}
 	.swiper-slide img {
 		width: 100%;
-		height: 5.5rem
+		height: 5.5rem;
 	}
 	.cartModel-text {
 		width: 100%;
-		padding: .2rem;
+		padding: 0.2rem;
 	}
 	.cartClose {
-		width: .4rem;
-		height: .4rem;
+		width: 0.4rem;
+		height: 0.4rem;
 	}
 	.vejfew {
 		background-color: #eee;
 		width: 100%;
-		height: .2rem;
+		height: 0.2rem;
 	}
 	.goodsOp {
 		input {
-			font-size: .24rem;
+			font-size: 0.24rem;
 			border: none;
-			width: .6rem;
+			width: 0.6rem;
 			text-align: center;
 		}
 		img {
-			width: .32rem;
-			height: .32rem;
+			width: 0.32rem;
+			height: 0.32rem;
 		}
 	}
 	.cartModel-bottom {
-		padding: .2rem;
-		font-size: .24rem;
+		padding: 0.2rem;
+		font-size: 0.24rem;
 		border-top: 1px solid #ccc;
 		text-align: center;
 	}
 	.cartModel-addCart {
 		background: @theme_background;
-		height: .8rem;
+		height: 0.8rem;
 		color: @base_color;
-		line-height: .8rem;
-		font-size: .28rem;
+		line-height: 0.8rem;
+		font-size: 0.28rem;
 		text-align: center;
 	}
 	.bot_pices {
 		display: flex;
-		flex-direction: column
+		flex-direction: column;
 	}
 </style>

@@ -5,8 +5,8 @@
 			<transition :name="slidename">
 				<div class="container" v-show="mainarea">
 					<!-- <div v-show="!havePage">
-																	<nopage></nopage>
-																</div> -->
+																								<nopage></nopage>
+																							</div> -->
 					<detailTitle :urlRouter="$route.path"></detailTitle>
 					<!-- 轮播图 -->
 					<div class="swiper-container" v-show="havePic">
@@ -20,7 +20,7 @@
 					<div v-show="!havePic" style="    margin-top: .8rem;">
 						<!-- <img src="../../../static/github.png" alt=""/> -->
 						<img style="    width: 100%;
-									   					 height: 3rem;" src="../../../static/img/noPic.png" />
+																   					 height: 3rem;" src="../../../static/img/noPic.png" />
 					</div>
 					<div>
 						<div class="detail-content">
@@ -58,8 +58,8 @@
 					<img src="../../../static/img/icon/cart_white.png" @click="toCart" />
 					<!-- 2222 -->
 					<!-- <transition name="bullet">
-																	<p v-show="goodsNum">{{goodsNum}}</p>
-																</transition> -->
+																								<p v-show="goodsNum">{{goodsNum}}</p>
+																							</transition> -->
 				</div>
 				<div class="addCart" @click="onCartModel()">
 					<span class="tabbar-label">加入购物车</span>
@@ -183,8 +183,6 @@
 			proItem(item, Oidx, Iidx) {
 				const that = this
 				var Iitem = that.goodsOut.specs[Oidx].pros //内循环的数组
-				// item.active = true
-				// console.log('item',item);
 				//每次点击所有的按钮初始化
 				for (var i = 0; i < Iitem.length; i++) {
 					Iitem[i].active = false
@@ -193,22 +191,24 @@
 				Iitem[Iidx].active = true
 				this.goodsNum++;
 				this.goodsNum--;
-				console.log('Oidx', Oidx); //外循环的id
-				console.log('Iidx', Iidx); //内循环的id
-				console.log('goodsOut', that.goodsOut.specs[Oidx]);
-				console.log('goodsOut', that.goodsOut.specs[Oidx].pros[Iidx].pro_id);
+				// console.log('Oidx', Oidx); //外循环的id
+				// console.log('Iidx', Iidx); //内循环的id
+				// console.log('goodsOut', that.goodsOut.specs[Oidx]);
+				// console.log('goodsOut', that.goodsOut.specs[Oidx].pros[Iidx].pro_id);
 				that.specsArr.push(that.goodsOut.specs[Oidx].pros[Iidx])
 				that.specsId = []
+				console.log('	that.specsArr', that.specsArr);
 				that.specsArr.forEach((ele, idx) => {
 					if (ele.active) {
+						console.log('ele',ele);
+						
 						that.specsId.push(ele.pro_id)
 					} else return
 					console.log('that.specsId.length', that.specsId.length, that.goodsOut.specs.length);
 				})
-				console.log('that.specsArr', that.specsArr);
-			},
-			theFirst() {
-				console.log('the first class');
+				// console.log('that.specsId',that.specsId);
+				that.specsId = [...new Set(that.specsId)]
+				console.log('that.specsId', that.specsId);
 			},
 			getGoodsDetail() {
 				const that = this
@@ -278,10 +278,40 @@
 					})
 					.catch(function(error) {});
 			},
+			// 立即购买
 			buyNow(goodsDetail, goodsOut) {
-				// 请求立即购买支付接口
-				console.log('goodsDetail', goodsDetail);
+				const that = this
+				if (that.specsId.length == that.goodsOut.specs.length) {
+					// that.specsId = that.specsId.join()
+				} else if (that.specsId.length < that.goodsOut.specs.length) {
+					alert('请选择商品规格')
+					return
+				}
 				console.log('goodsOut', goodsOut);
+				console.log('this.goodsNum', that.goodsNum);
+				console.log('that.specsId', that.specsId);
+				goodsOut.count = that.goodsNum
+				goodsOut.specsId = that.specsId
+				goodsOut.isCar = false
+				console.log('goodsOut',goodsOut);
+				
+				var obj = JSON.stringify(goodsOut);
+				localStorage.setItem('obj', obj);
+				that.$router.push({
+					path: 'orderwait',
+					query: {
+						goodsOut: goodsOut
+					}
+				})
+				// 跳转至购物车结算页
+				// this.$router.push({
+				// 	path: 'orderwait',
+				// 	query: {
+				// 		checkedItem: this.checkedItem
+				// 	}
+				// })
+				// console.log('goodsDetailgoodsDetailgoodsDetailgoodsDetail', goodsDetail);
+				// console.log('goodsOut', goodsOut);
 			},
 			toCart() {
 				this.$router.push('./cart');

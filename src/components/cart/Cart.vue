@@ -355,6 +355,8 @@
 							this.checkedItem.push(el);
 							this.setOrders(this.checkedItem)
 							console.log('this.checkItem22222222222',this.checkedItem);
+							this.checkedItem[0].isCar = true
+							console.log('this.checkItem33333333333',this.checkedItem);
 							var obj = JSON.stringify(this.checkedItem);
 							localStorage.setItem('obj', obj);
 							this.$router.push({

@@ -21,6 +21,7 @@ const getOrder = (resolve) => {
         resolve(module)
     })
 }
+
 const Coupon = (resolve) => {
     import ('@/components/coupon/coupon').then((module) => {
         resolve(module)
@@ -404,6 +405,7 @@ export default new Router({
             path: '/getOrder',
             component: getOrder
         },
+
         {
             path: '/reviseAvator',
             component: reviseAvator

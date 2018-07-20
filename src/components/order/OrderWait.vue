@@ -11,12 +11,12 @@
 					</div>
 					<div class="marleft">
 						<!-- <div class="warp_container">
-						<div class="wai_warp">
-							<img src="../../../static/img/ade_shop/car_store.png" alt="">
-							<p class="p_mid">平台自营店</p>
-							<img src="../../../static/img/ade_shop/car_right.png" alt="">
-						</div>
-					</div> -->
+							<div class="wai_warp">
+								<img src="../../../static/img/ade_shop/car_store.png" alt="">
+								<p class="p_mid">平台自营店</p>
+								<img src="../../../static/img/ade_shop/car_right.png" alt="">
+							</div>
+						</div> -->
 						<div class="item_container" v-for="Item in cat">
 							<div>
 								<img class="img_avator" :src="Item.goods_image_path" alt="">
@@ -35,7 +35,7 @@
 										</div>
 										<div style="display:flex;margin-top:.2rem">
 											<p style="color:red">¥</p>
-											<p style="color:red" class="store_price">{{Item.total_price}}</p>
+											<p style="color:red" class="store_price">{{Item.price}}</p>
 											<p style="    margin-left: .1rem;margin-bottom: .1rem;">元</p>
 										</div>
 									</div>
@@ -44,7 +44,7 @@
 						</div>
 					</div>
 					<div style="    background-color: #eee;
-																											    height: .22rem;">
+																																							    height: .22rem;">
 					</div>
 					<div class="chooseAddress" @click="onAddress()">
 						<div class="flex-align-center chooseBox">
@@ -55,8 +55,8 @@
 							</div>
 							<div class="flex-align-center flex-between" v-if="default_address">
 								<!-- <div v-show="haveDefalutAddr">
-									<p>请选择一个收货地址</p>
-								</div> -->
+																					<p>请选择一个收货地址</p>
+																				</div> -->
 								<div class="p_address">
 									<div class="add_up">
 										<div style="display:flex">
@@ -81,7 +81,7 @@
 						</div>
 					</div>
 					<div style="    background-color: #eee;
-																											    height: .22rem;">
+																																							    height: .22rem;">
 					</div>
 					<div class="chooseAddress" @click="onBill()" v-if='invoice_type'>
 						<div class="flex-align-center chooseBox">
@@ -111,19 +111,18 @@
 						</div>
 					</div>
 					<div style="    background-color: #eee;
-																											    height: .22rem;">
+																																							    height: .22rem;">
 					</div>
 					<div class="chooseAddress" @click="onCoupon()">
 						<div class="flex-align-center chooseBox">
 							<div class="flex-align-center flex-between">
 								<p>优惠券</p>
-								<!-- <p v-show="this.$store.state.chooseaddress">{{this.$store.state.chooseaddress}}</p> -->
 								<img src="../../../static/img/icon/arrowRight.png" alt="" />
 							</div>
 						</div>
 					</div>
 					<div style="    background-color: #eee;
-																											    height: .22rem;">
+																																							    height: .22rem;">
 						<div style="font-size:.25rem;     padding-left: .2rem;   padding-top: .5rem;">
 							<p>商品数量：{{count}}件</p>
 							<p>合计金额：{{allCoach}}元</p>
@@ -133,18 +132,18 @@
 					</div>
 					<div style="height:2.5rem"></div>
 					<!-- <div class="orderItem flex" v-for="orderItem in $store.state.orders">
-										<img :src="orderItem.GoodsImage" class="goodsImg" />
-										<div>
-											<p class="goods-name">{{orderItem.GoodsName}}</p>
-											<p class="goods-num">x{{orderItem.GoodsNum}}</p>
-											<p class="goods-price">¥{{orderItem.GoodsPrice}}</p>
-										</div>
-									</div> -->
+							<img :src="orderItem.GoodsImage" class="goodsImg" />
+							<div>
+								<p class="goods-name">{{orderItem.GoodsName}}</p>
+								<p class="goods-num">x{{orderItem.GoodsNum}}</p>
+								<p class="goods-price">¥{{orderItem.GoodsPrice}}</p>
+							</div>
+						</div> -->
 					<div class="orderBottom flex-between">
 						<div class="money_all">
 							<span style="margin-right: .2rem;">合计:</span>
 							<span style="color:red">
-								{{allCoach}}元</span>
+							{{allCoach}}元</span>
 						</div>
 						<div class="getOrder">
 							<span @click="onOrder">马上下单</span>
@@ -182,8 +181,9 @@
 				invoice_title_type: '',
 				goodscart_idList: [],
 				orderIdL: null,
-				haveDefalutAddr:false,
-				addressList:[]
+				haveDefalutAddr: false,
+				addressList: [],
+				parmCat: [],
 			}
 		},
 		components: {
@@ -198,12 +198,25 @@
 			])
 		},
 		mounted() {
-			console.log('this.$refs.noback',this.$refs);
-            this.$refs.noback.isBack_detail = false;
-			this.$refs.noback.isBack = false;
-			
+			console.log('this.$store.state.chooseaddress1111111111111', this.$store.state.chooseaddress);
+			var chooseAddres = JSON.stringify(this.$store.state.chooseaddress);
+			console.log('chooseAddres',chooseAddres);
+			var default_address1111= JSON.parse(localStorage.getItem("default_address1"));
+			console.log('default_address1111',default_address1111);
 			const that = this;
-			// console.log('22222222', that.$route.query.invoice_type, that.$route.query.invoice_content, that.$route.query.invoice_title_type);
+			this.$refs.noback.isBack_detail = false;
+			this.$refs.noback.isBack = false;
+			const cat = JSON.parse(localStorage.getItem("obj"))
+			if (cat.isCar == false) {
+				console.log('spxq', cat.isCar);
+				this.getDetail();
+			} else {
+				console.log('cat', cat.isCar);
+				this.getCatList();
+			}
+			var default_address = JSON.parse(localStorage.getItem("default_address11111"));
+			that.default_address = default_address
+			console.log('that.default_address',that.default_address);
 			// 判断发票
 			if (that.$route.query.invoice_type == 0) {
 				that.invoice_type = '普通'
@@ -220,36 +233,51 @@
 			} else if (that.$route.query.invoice_title_type == 1) {
 				that.invoice_title_type = '单位'
 			}
-			var cat = JSON.parse(localStorage.getItem("obj"));
-			var default_address = JSON.parse(localStorage.getItem("default_address"));
-			console.log('this.1111111111111111111111111', default_address);
-			that.default_address = default_address
-			cat.forEach((ele, idx) => {
-				that.goodscart_idList.push(ele.goodscart_id)
-			})
-			that.goodscart_idList = that.goodscart_idList.join(",")
-			// console.log('this.goodscart_idList22222222222222222222222222', that.goodscart_idList, that.default_address);
-			that.cat = cat
-			this.getAddressList();
-			console.log('that.catr', that.cat);
-			/*判断动画是进还是出*/
-			// if (this.$store.state.comname === 'goodsdetail' || this.$store.state.comname === 'cart') {
-			// 	this.slidename = 'slide-go';
-			// } else {
-			// 	this.slidename = 'slide-back'
-			// }
-			// this.setComname('orderwait');
-			// Bus.$on('msg', (msg) => {
-			// 	that.message = msg
-			// })
-			for (var i = 0; i < that.cat.length; i++) {
-				this.allCoach += that.cat[i].total_price
-				this.count += that.cat[i].count
-			}
-			var pice = that.allCoach;
-			localStorage.setItem('pice', pice);
 		},
 		methods: {
+			//商品详情结算数据
+			getDetail() {
+				const that = this
+				let cat = JSON.parse(localStorage.getItem("obj"));
+				console.log('我是商品详情结算数据', cat.goods.goods_name);
+				this.$http
+					.get("/myapi/adel-shop/app/auth/buyNow.htm?goodsId=" + cat.goods.id + "&count=" + cat.count + "&proIds=" + cat.specsId)
+					.then(function(res) {
+						console.log('我是商品详情结算数据', cat.goods.goods_name);
+						console.log('res.data.data', res.data.data);
+						res.data.data.result[0].goodsCarts[0].goods_name = cat.goods.goods_name
+						that.cat.push(res.data.data.result[0].goodsCarts[0])
+						console.log('cat', that.cat);
+						that.allCoach = res.data.data.result[0].goodsCarts[0].total_price
+						that.count = res.data.data.result[0].goodsCarts[0].count
+						that.cat.forEach((ele, idx) => {
+							that.goodscart_idList.push(ele.goodscart_id)
+						})
+						var pice = that.allCoach;
+						localStorage.setItem('pice', pice);
+						that.goodscart_idList = that.goodscart_idList.join(",")
+					})
+					.catch(function(error) {});
+			},
+			// 购物车结算数据
+			getCatList() {
+				let cat = JSON.parse(localStorage.getItem("obj"));
+				console.log('我是购物车结算数据', cat);
+				let that = this
+				console.log('cat22222222222', cat);
+				that.cat = cat
+				console.log('that.catr', that.cat);
+				for (var i = 0; i < that.cat.length; i++) {
+					this.allCoach += that.cat[i].price * that.cat[i].count
+					this.count += that.cat[i].count
+				}
+				cat.forEach((ele, idx) => {
+					that.goodscart_idList.push(ele.goodscart_id)
+				})
+				that.goodscart_idList = that.goodscart_idList.join(",")
+				var pice = that.allCoach;
+				localStorage.setItem('pice', pice);
+			},
 			// 获取收货地址
 			getAddressList() {
 				const that = this
@@ -264,12 +292,10 @@
 								that.default_address = ele
 								haveDefault.push(ele)
 							}
-							if(haveDefault.includes('1')){
+							if (haveDefault.includes('1')) {
 								that.haveDefalutAddr = false
-							}
-							else{
+							} else {
 								that.haveDefalutAddr = true
-								
 							}
 						})
 					})
@@ -307,10 +333,9 @@
 				this.setIschoose(1);
 				this.$router.push('./address');
 				this.haveDefalutAddr = true
-				console.log('this.$tourt',this.$store.state);
+				console.log('this.$tourt', this.$store.state);
 				var address = localStorage.getItem('default_address')
-				console.log('address222222222222222222222222',address);
-				
+				console.log('address222222222222222222222222', address);
 			},
 			onBill() {
 				this.$router.push({

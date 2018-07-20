@@ -63,10 +63,10 @@ axios.interceptors.response.use((response) => {
 
     return response
 }, (error) => {
-    if (error) {
-        console.log('响应接口错误', error);
-        endLoading()
-    }
+    // if (error) {
+    //     console.log('响应接口错误', error);
+    //     endLoading()
+    // }
 
     return Promise.reject(error)
 })

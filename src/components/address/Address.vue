@@ -157,7 +157,7 @@
 					this.setIschoose(2);
 					console.log('this.$store.state.chooseaddres', this.$store.state.chooseaddress);
 					var default_address1 = JSON.stringify(this.$store.state.chooseaddress);
-					localStorage.setItem('default_address', default_address1);
+					localStorage.setItem('default_address11111', default_address1);
 				}
 			},
 			...mapMutations({
