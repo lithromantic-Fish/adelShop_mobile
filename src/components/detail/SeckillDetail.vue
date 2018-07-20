@@ -282,7 +282,7 @@
 			} else {
 				this.slidename = "slide-go";
 			}
-			this.setComname("goodsdetail");
+			// this.setComname("goodsdetail");
 		},
 		components: {
 			Headersec,
@@ -464,32 +464,6 @@
 				this.addCartModel = true;
 				this.isBuy = false;
 			},
-			// onMSBuy(item) {
-			// 	const that = this;
-			// 	if (item.specs[0]) {
-			// 		// 有规格的商品添加到购物车
-			// 		that.getMSMoreCar(item);
-			// 	} else {
-			// 		// 无规格的商品添加到购物车
-			// 		that.getMSGoodsToCar(item)
-			// 	}
-			// 	if (this.isBuy) {
-			// 		let orderArr = [];
-			// 		orderArr.push(this.$store.state.goods)
-			// 		this.setOrders(orderArr);
-			// 		this.$router.push('./orderwait')
-			// 	} else {
-			// 		if (!this.cartNum) {
-			// 			this.setCarts(this.$store.state.goods);
-			// 			this.addCartModel = false;
-			// 			this.cartNum = true;
-			// 			this.cartLength = this.cartLength + 1;
-			// 			setTimeout(() => {
-			// 				this.cartNum = false;
-			// 			}, 2000)
-			// 		}
-			// 	}
-			// },
 			onBuyModel() {
 				this.addCartModel = true;
 				this.isBuy = true;
@@ -505,36 +479,56 @@
 			onBuy(item) {
 				const that = this;
 				if (that.specsId.length == item.specs.length) {
-					if (item.specs[0]) {
-						// 有规格的商品添加到购物车
-						that.getMoreCar(item);
+					if (that.isBuy) {
+						console.log('立即购买');
+						console.log('item', item);
+						console.log('item', item);
+						console.log('this.goodsNum', that.goodsNum);
+						console.log('that.specsId', that.specsId);
+						item.count = that.goodsNum
+						item.specsId = that.specsId
+						item.isSeckillDetail = true
+						console.log('item11', item);
+						var obj = JSON.stringify(item);
+						localStorage.setItem('obj', obj);
+						that.$router.push({
+							path: 'orderwait',
+						})
 					} else {
-						// 无规格的商品添加到购物车
-						that.getGoodsToCar(item);
+						console.log('加入购物车');
+						if (item.specs[0]) {
+							// 有规格的商品添加到购物车
+							that.getMoreCar(item);
+						} else {
+							// 无规格的商品添加到购物车
+							that.getGoodsToCar(item);
+						}
 					}
-				} else if (that.specsId.length < item.specs.length) {
-					alert("请选择商品规格");
-					return;
-				}
-				if (this.isBuy) {
-					// 立即购买
-					console.log("立即购买11111111111");
-					let orderArr = [];
-					orderArr.push(this.$store.state.goods);
-					this.setOrders(orderArr);
-					this.$router.push('./orderwait')
 				} else {
-					if (!this.cartNum) {
-						this.goodsNum = 1;
-						this.setCarts(this.$store.state.goods);
-						this.addCartModel = false;
-						this.cartNum = true;
-						this.cartLength = this.goodsNum;
-						setTimeout(() => {
-							this.cartNum = false;
-						}, 2000);
-					}
+					alert("请选择商品规格");
 				}
+				// if (that.specsId.length == item.specs.length) {
+				// 	if (item.specs[0]) {
+				// 		// 有规格的商品添加到购物车
+				// 		that.getMoreCar(item);
+				// 	} else {
+				// 		// 无规格的商品添加到购物车
+				// 		that.getGoodsToCar(item);
+				// 	}
+				// } else if (that.specsId.length < item.specs.length) {
+				// 	alert("请选择商品规格");
+				// 	return;
+				// }
+				// if (!this.cartNum) {
+				// 	this.goodsNum = 1;
+				// 	this.setCarts(this.$store.state.goods);
+				// 	this.addCartModel = false;
+				// 	this.cartNum = true;
+				// 	this.cartLength = this.goodsNum;
+				// 	setTimeout(() => {
+				// 		this.cartNum = false;
+				// 	}, 2000);
+				// }
 			},
 			onChooseAddress(item) {
 				this.default_address = item;
@@ -576,28 +570,28 @@
 					.then(function(res) {})
 					.catch(function(error) {});
 			},
-			//添加有规格的商品到购物车
-			// getMSMoreCar(item) {
-			// 	const that = this
-			// 	this.$http
-			// 		.get("/myapi/adel-shop/app/auth/addCart.htm?goodsId=" + item.goods_id + '&count=' + that.goodsNum + '&proIds=' + item.specs[0].spec_id)
-			// 		.then(function(res) {})
-			// 		.catch(function(error) {});
-			// },
-			// // 添加商品到购物车
-			// getMSGoodsToCar(item) {
-			// 	const that = this
-			// 	this.$http
-			// 		.get("/myapi/adel-shop/app/auth/addCart.htm?goodsId=" + item.goods_id + '&count=' + that.goodsNum)
-			// 		.then(function(res) {})
-			// 		.catch(function(error) {});
-			// },
-			...mapMutations({
-				setOrders: "SET_ORDERS",
-				setCarts: "SET_CARTS",
-				setComname: "SET_COMNAME"
-			})
-		}
+		},
+		//添加有规格的商品到购物车
+		// getMSMoreCar(item) {
+		// 	const that = this
+		// 	this.$http
+		// 		.get("/myapi/adel-shop/app/auth/addCart.htm?goodsId=" + item.goods_id + '&count=' + that.goodsNum + '&proIds=' + item.specs[0].spec_id)
+		// 		.then(function(res) {})
+		// 		.catch(function(error) {});
+		// },
+		// // 添加商品到购物车
+		// getMSGoodsToCar(item) {
+		// 	const that = this
+		// 	this.$http
+		// 		.get("/myapi/adel-shop/app/auth/addCart.htm?goodsId=" + item.goods_id + '&count=' + that.goodsNum)
+		// 		.then(function(res) {})
+		// 		.catch(function(error) {});
+		// },
+		...mapMutations({
+			setOrders: "SET_ORDERS",
+			setCarts: "SET_CARTS",
+			setComname: "SET_COMNAME"
+		})
 	};
 </script>
 
