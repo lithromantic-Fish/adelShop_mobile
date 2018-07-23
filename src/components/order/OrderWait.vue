@@ -63,9 +63,9 @@
 											<p class="area_now">{{default_address.area_name}}</p>
 											<p class="area_now1">{{default_address.detail_address}}</p>
 										</div>
-										<div>
+										<!-- <div>
 											<p class="default_label">默认</p>
-										</div>
+										</div> -->
 										<div>
 											<p class="default_label2">{{default_address.label}}</p>
 										</div>
