@@ -312,13 +312,12 @@
                     empty: { //配置列表无任何数据的提示
                         warpId: "dataList",
                         icon: "../res/img/mescroll-empty.png",
-             
                     },
                 },
             });
         },
         methods: {
-            toDatail(item,id) {
+            toDatail(item, id) {
                 this.$router.push({
                     path: "/detail",
                     query: {
