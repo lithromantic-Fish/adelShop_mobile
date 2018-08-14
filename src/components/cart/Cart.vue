@@ -7,8 +7,8 @@
 				<div v-show="!havePage">
 					<nopage></nopage>
 				</div>
-				<div v-show="havePage">
-					<div>
+				<div v-show="havePage" class="padding-bottom:1rem">
+					<div >
 						<div class="title_car">
 							<p class="warn">温馨提示，产品购买是否成功，以最终下单为准，请尽快结算</p>
 						</div>
@@ -190,6 +190,7 @@
 					.then(function(res) {
 						if (res.data.code == -1) {
 							that.toLogin = true
+							alert("用户登录账户过期或失效，请重新登录")
 						} else if (res.data.code == 2) {
 							that.carIsNO = true
 						} else {
@@ -426,7 +427,7 @@
 		font-size: .25rem
 	}
 	.allContainer {
-		padding-bottom: 1rem
+		// padding-bottom: 1rem
 	}
 	.item_goodname {
 		display: flex;

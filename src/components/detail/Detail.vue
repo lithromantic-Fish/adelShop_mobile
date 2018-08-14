@@ -4,9 +4,9 @@
 			<headersec tabname="商品详情" ref="noback"></headersec>
 			<transition :name="slidename">
 				<div class="container" v-show="mainarea">
-					<!-- <div v-show="!havePage">
-																								<nopage></nopage>
-																							</div> -->
+				<!-- <div v-show="!havePage">
+						<nopage></nopage>
+					</div> -->
 					<detailTitle :urlRouter="$route.path"></detailTitle>
 					<!-- 轮播图 -->
 					<div class="swiper-container" v-show="havePic">
@@ -19,8 +19,7 @@
 					</div>
 					<div v-show="!havePic" style="    margin-top: .8rem;">
 						<!-- <img src="../../../static/github.png" alt=""/> -->
-						<img style="    width: 100%;
-																   					 height: 3rem;" src="../../../static/img/noPic.png" />
+						<img style="    width: 100%; height: 3rem;" src="../../../static/img/noPic.png" />
 					</div>
 					<div>
 						<div class="detail-content">
@@ -186,6 +185,7 @@
 				//每次点击所有的按钮初始化
 				for (var i = 0; i < Iitem.length; i++) {
 					Iitem[i].active = false
+					console.log("Iitem",Iitem)
 				}
 				//设置当前的选中状态
 				Iitem[Iidx].active = true

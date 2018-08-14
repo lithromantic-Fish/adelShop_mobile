@@ -43,16 +43,18 @@ Vue.prototype.$http = axios;
 var isgone = false
     // 请求拦截器
 axios.interceptors.request.use(function(config) {
+
     console.log('config', config);
     // 在发送请求之前做些什么
     showFullScreenLoading()
 
     return config;
 }, function(error) {
-    console.log('请求接口错误', error);
+    console.log('请求接口错误1', error);
 
     // 对请求错误做些什么
     return Promise.reject(error);
+    console.log('请求接口错误2', error);
 
 });
 // 响应拦截器
@@ -67,6 +69,9 @@ axios.interceptors.response.use((response) => {
     //     console.log('响应接口错误', error);
     //     endLoading()
     // }
+    console.log('请求接口错误3', error);
+    endLoading()
+    alert("网络错误，请尝试重新刷新页面")
 
     return Promise.reject(error)
 })

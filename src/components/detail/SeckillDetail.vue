@@ -293,23 +293,24 @@
 		methods: {
 			proItem(Oidx, Iidx) {
 				const that = this;
-				console.log("Oidx", Oidx);
-				console.log("Iidx", Iidx);
-				console.log(" this.goodsDetail.specs", this.goodsDetail.specs);
-				console.log("goodsDetail", this.goodsDetail.specs[Oidx].pros); //当前选择的数组
+				// console.log("Oidx", Oidx);
+				// console.log("Iidx", Iidx);
+				// console.log(" this.goodsDetail.specs", this.goodsDetail.specs);
+				// console.log("goodsDetail", this.goodsDetail.specs[Oidx].pros); //当前选择的数组
 				var Iitem = this.goodsDetail.specs[Oidx].pros;
 				// //每次点击所有的按钮初始化
 				for (var i = 0; i < Iitem.length; i++) {
 					Iitem[i].active = false;
 				}
+				console.log("Iitem", Iitem)
 				this.goodsNum++;
 				this.goodsNum--;
 				// //设置当前的选中状态
 				Iitem[Iidx].active = true;
-				// if (Iitem[Iidx].active) {
-				// 	console.log('pro_id', Iitem[Iidx].pro_id, Iitem[Iidx].pro_value);
-				// 	this.haveSelectSpec.push(Iitem[Iidx].pro_id)
-				// }
+				if (Iitem[Iidx].active) {
+					console.log('pro_id', Iitem[Iidx].pro_id, Iitem[Iidx].pro_value);
+					this.haveSelectSpec.push(Iitem[Iidx].pro_id)
+				}
 				that.specsArr.push(Iitem[Iidx]);
 				that.specsId = [];
 				console.log("	that.specsArr", that.specsArr);
@@ -423,6 +424,7 @@
 				// }
 			},
 			getMyTime(needTime) {
+				console.log('needTime', needTime);
 				const that = this;
 				function countDown(times) {
 					var timer = null;
@@ -478,6 +480,8 @@
 			},
 			onBuy(item) {
 				const that = this;
+				console.log('that.specsId',that.specsId)
+				console.log('item------------',item)
 				if (that.specsId.length == item.specs.length) {
 					if (that.isBuy) {
 						console.log('立即购买');

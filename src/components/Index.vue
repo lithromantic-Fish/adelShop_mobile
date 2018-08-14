@@ -19,8 +19,6 @@
           </div>
           <div class="swiper-pagination"></div>
         </div>
-
-        
         <div class="content" v-cloak>
           <div class="productTop flex-between seckill" @click="getSeckillData()">
             <p class="productTop-text seckill_color">限时秒杀</p>
@@ -337,6 +335,7 @@
           .get("/myapi/adel-shop/app/flashSale.htm")
           .then(function(res) {
             that.seckillList = res.data.data.group_goodsList.resultList.slice(0, 4)
+            console.log(" that.seckillList", that.seckillList)
             // res.data.data.group_goodsList.resultList.forEach((ele, idx) => {
             //   ele.isRushbuy = true;
             // })
