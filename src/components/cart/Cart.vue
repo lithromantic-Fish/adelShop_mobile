@@ -7,8 +7,8 @@
 				<div v-show="!havePage">
 					<nopage></nopage>
 				</div>
-				<div v-show="havePage" class="padding-bottom:1rem">
-					<div >
+				<div v-show="havePage" style="padding-bottom:1rem">
+					<div>
 						<div class="title_car">
 							<p class="warn">温馨提示，产品购买是否成功，以最终下单为准，请尽快结算</p>
 						</div>
@@ -115,7 +115,8 @@
 				radioStoreArr: [],
 				toLogin: false,
 				carIsNO: false,
-				checkedItem: []
+				checkedItem: [],
+				storeArr: [] //判断是否所有的商铺都进去了
 			}
 		},
 		components: {
@@ -159,18 +160,45 @@
 			selectSingleGoods(item, idx, storeItem) {
 				const that = this
 				that.radioArr = []
+				that.radioStoreArr = []
 				that.isSingGoods = true
 				item.goodsRadio = !item.goodsRadio;
 				that.carList[idx].goodsCarts.forEach((el, id) => {
 					that.radioArr.push(el.goodsRadio)
 				})
+				console.log("that.radioArr", that.radioArr)
 				if (that.radioArr.indexOf(false) == -1) {
 					storeItem.goodsStoreRadioAll = true;
-					that.goodsRadioAll = true;
+					// that.goodsRadioAll = true;
 				} else {
 					storeItem.goodsStoreRadioAll = false;
+					// that.goodsRadioAll = false;
+				}
+				console.log('storeItem', storeItem);
+				console.log('item', item);
+				console.log('carList', that.carList)
+				// if (storeItem.goodsStoreRadioAll) {
+				// 	that.storeArr.push(storeItem.goodsStoreRadioAll)
+				// 	if (that.storeArr.indexOf(false) == -1) {
+				// 		that.goodsRadioAll = true
+				// 	} else {
+				// 		that.goodsRadioAll = true
+				// 	}
+				// }
+				// for (let index = 0; index < that.carList.length; index++) {
+				// 		that.storeArr.push(that.carList[index].goodsStoreRadioAll)
+				// }
+				that.carList.forEach(ele => {
+					that.radioStoreArr.push(ele.goodsStoreRadioAll)
+				})
+				if (that.radioStoreArr.indexOf(false) == -1) {
+					that.goodsRadioAll = true;
+				} else {
 					that.goodsRadioAll = false;
 				}
+				console.log('that.store', that.storeArr)
+				console.log('that.carList', that.carList)
+				console.log('that.radioStoreArr', that.radioStoreArr)
 				// 合计单个商品的价格
 				if (item.goodsRadio) {
 					that.allCoach += parseInt(item.count * item.price)
@@ -188,10 +216,13 @@
 				this.$http
 					.get("/myapi/adel-shop/app/auth/cartList.htm")
 					.then(function(res) {
+						console.log('1')
 						if (res.data.code == -1) {
+							console.log('2')
 							that.toLogin = true
 							alert("用户登录账户过期或失效，请重新登录")
 						} else if (res.data.code == 2) {
+							console.log('3')
 							that.carIsNO = true
 						} else {
 							const carData = res.data.data.result
@@ -281,6 +312,8 @@
 				} else {
 					that.goodsRadioAll = false;
 				}
+				console.log('that.radioStoreArr', that.radioStoreArr)
+
 				that.isSingGoods = true
 			},
 			/*添加商品数量*/
@@ -355,9 +388,9 @@
 						if (el.goodsRadio && this.checkedItem.indexOf(el) == -1) {
 							this.checkedItem.push(el);
 							this.setOrders(this.checkedItem)
-							console.log('this.checkItem22222222222',this.checkedItem);
+							console.log('this.checkItem22222222222', this.checkedItem);
 							this.checkedItem[0].isCar = true
-							console.log('this.checkItem33333333333',this.checkedItem);
+							console.log('this.checkItem33333333333', this.checkedItem);
 							var obj = JSON.stringify(this.checkedItem);
 							localStorage.setItem('obj', obj);
 							this.$router.push({
@@ -372,7 +405,6 @@
 					})
 				})
 				// if (this.checkedItem.length != 0) {
-				
 				// }
 			},
 			/*向左滑出现删除*/
