@@ -61,7 +61,6 @@
 									<p>{{default_address.trueName}}</p>&nbsp;&nbsp;
 									<p>地址：</p>
 									<p class="arer_aaa">{{default_address.area_name}}</p>&nbsp;
-									<!-- <p class="gets">{{default_address.detail_address}}</p>&nbsp;  -->
 								</div>
 								<p v-show="haveMore" @click="tomore">展开</p>
 								<p v-show="!haveMore" @click="tomore">收起</p>
@@ -99,7 +98,6 @@
 												<p class="gets" style="margin-left: .2rem;">{{addressItem.detail_address}}</p>
 											</div>
 										</div>
-										<!-- <p>{{addressItem}}</p> -->
 									</div>
 								</div>
 							</div>

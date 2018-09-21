@@ -84,8 +84,8 @@
                         <p><span class="goods-price">￥ {{goodsItem.goods_current_price}} 起</span></p>
                       </div>
                       <!-- <div class="addCartBox flex-between rebot">
-                                                                    <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
-                                                                    <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
+                                <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
+                                <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
                       <!-- </div> -->
                     </div>
                   </div>
@@ -118,8 +118,8 @@
                         <p><span class="goods-price">￥ {{goodsItem.goods_current_price}}起</span></p>
                       </div>
                       <!-- <div class="addCartBox flex-between rebot">
-                                    <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
-                                    <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
+                                <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
+                                <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
                       <!-- </div> -->
                     </div>
                   </div>
@@ -140,8 +140,8 @@
                         <p><span class="goods-price">￥ {{goodsItem.goods_current_price}} 起</span></p>
                       </div>
                       <!-- <div class="addCartBox flex-between rebot">
-                                                                <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
-                                                                <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
+                                <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
+                                <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
                       <!-- </div>  -->
                     </div>
                   </div>
@@ -151,11 +151,11 @@
           </div>
           <div class="gap">
             <!-- <p>选购门锁</p>
-                              <p>企业团购</p>
-                              <p>限时特价</p>
-                              <p>爱迪尔服务</p>
-                              <p>以旧换新</p>
-                              <p>售后政策</p> -->
+                      <p>企业团购</p>
+                      <p>限时特价</p>
+                      <p>爱迪尔服务</p>
+                      <p>以旧换新</p>
+                      <p>售后政策</p> -->
           </div>
           <!-- 为你推荐 -->
           <div class="recommend_forme_containe1">
@@ -182,8 +182,8 @@
                         <p><span class="goods-price">￥ {{goodsItem.goods_current_price}} 起</span></p>
                       </div>
                       <!-- <div class="addCartBox flex-between rebot">
-                          <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
-                          <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
+                            <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
+                            <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
                       <!-- </div> -->
                     </div>
                   </div>
@@ -204,8 +204,8 @@
                         <p><span class="goods-price">￥ {{goodsItem.goods_current_price}} 起</span></p>
                       </div>
                       <!-- <div class="addCartBox flex-between rebot">
-                                            <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
-                                            <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
+                                              <img src="../../static/img/icon/shop_addCart.png" @click="onAddCart(goodsItem,goodsItem.GoodsName)" v-show="!goodsItem.shopAddCart" />
+                                              <img src="../../static/img/icon/shop_addCart_select.png" @click="onAddCart(goodsItem.GoodsName)" v-show="goodsItem.shopAddCart" /> -->
                       <!-- </div> -->
                     </div>
                   </div>

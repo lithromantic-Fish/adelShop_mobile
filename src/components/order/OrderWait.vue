@@ -335,7 +335,7 @@
 				// this.$router.push('./order');
 				// 生成订单接口
 				console.log('that.default_address', this.default_address);
-				this.toOrderList()
+				this.toOrderList();
 				// this.$router.push('./getOrder')
 				this.setPays(this.$store.state.orders);
 			},

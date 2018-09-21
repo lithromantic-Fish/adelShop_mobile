@@ -47,31 +47,38 @@ axios.interceptors.request.use(function(config) {
     console.log('config', config);
     // 在发送请求之前做些什么
     showFullScreenLoading()
-
     return config;
 }, function(error) {
-    console.log('请求接口错误1', error);
-
     // 对请求错误做些什么
     return Promise.reject(error);
-    console.log('请求接口错误2', error);
 
 });
-// 响应拦截器
+console.log('thissss', this)
+    // 响应拦截器
 axios.interceptors.response.use((response) => {
+    const that = this
+    console.log('that', that)
     tryHideFullScreenLoading()
     console.log('response', response);
-
-
     return response
 }, (error) => {
-    // if (error) {
-    //     console.log('响应接口错误', error);
-    //     endLoading()
-    // }
-    console.log('请求接口错误3', error);
+    if (error) {
+        console.log('响应接口错误', error);
+        console.log('err', error.response)
+        console.log(typeof(error))
+        if (error.response == undefined) {
+            alert("登录状态过期")
+            endLoading()
+            console.log('that', that)
+            console.log("window", window)
+            router.push({
+                path: "/Login"
+            });
+        } else if (error.response.status === 404) {
+            alert("网络错误，请刷新重试")
+        }
+    }
     endLoading()
-    alert("网络错误，请尝试重新刷新页面")
 
     return Promise.reject(error)
 })
