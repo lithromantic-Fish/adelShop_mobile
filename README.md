@@ -1,5 +1,5 @@
 ## adelShop_mobile
-vue全家桶移动端商城
+vue全家桶制作的移动端商城
 
 #### 克隆项目
 git clone https://github.com/751221644/qydx.git
