@@ -1,10 +1,6 @@
 ## adelShop_mobile
 vue全家桶移动端商城
 
-## 运行步骤
 
-## npm install或yarn
-
-## npm run dev或yarn run dev
-
-## npm run build
+npm i 
+npm run dev
