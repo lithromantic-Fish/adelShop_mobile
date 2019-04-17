@@ -2,7 +2,7 @@
 vue全家桶制作的移动端商城
 
 #### 克隆项目
-git clone https://github.com/751221644/qydx.git
+git clone https://github.com/lithromantic-Fish/adelShop_mobile.git
 
 #### 安装依赖 (如果安装失败就多安装几次，实在不行就换淘宝镜像)
 npm install
